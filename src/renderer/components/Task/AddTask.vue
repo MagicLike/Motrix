@@ -2,7 +2,7 @@
   <el-dialog
     custom-class="tab-title-dialog add-task-dialog"
     width="64vw"
-    :visible.sync="visible"
+    :visible="visible"
     :before-close="handleClose"
     @open="handleOpen"
     @opened="handleOpened"
@@ -86,6 +86,19 @@
             :autosize="{ minRows: 2, maxRows: 3 }"
             :placeholder="$t('task.task-user-agent')"
             v-model="form.userAgent"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item
+          :label="`${$t('task.task-authorization')}: `"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            auto-complete="off"
+            :autosize="{ minRows: 2, maxRows: 3 }"
+            :placeholder="$t('task.task-authorization')"
+            v-model="form.authorization"
           >
           </el-input>
         </el-form-item>
@@ -239,8 +252,8 @@
       }
     },
     methods: {
-      autofillResourceLink () {
-        const content = this.$electron.clipboard.readText()
+      autofillResourceLink: async () => {
+        const content = await navigator.clipboard.readText()
         const hasResource = detectResource(content)
         if (!hasResource) {
           return
